@@ -1,3 +1,0 @@
-Simplest way to get this stuff to build is
-
-    $ python setup.py build_ext --inplace [-c mingw32]

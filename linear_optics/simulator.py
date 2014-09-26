@@ -1,7 +1,7 @@
 import numpy as np
 import itertools as it
-import permanent
-import combinadics
+import perm as permanent
+import combi as combinadics
 import progressbar as pb
 
 def dict_to_sorted_numpy(data):
