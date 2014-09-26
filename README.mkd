@@ -1,1 +1,9 @@
 A stripped-down implementation of the linear-optics simulator built into [http://github.com/peteshadbolt/qy](qy).
+
+**YOU CAN GET THIS CODE, TOGETHER WITH PRECOMPILED BINARIES, HERE:
+[http://www.peteshadbolt.co.uk/public/loqc-simulator.zip](http://www.peteshadbolt.co.uk/public/loqc-simulator.zip)**
+
+Alternatively you can build it from the source provided here.
+Caveats:
+   - Do not trust my implementation of the Reck scheme! Comments welcome.
+   - I usually define phaseshifters as a 2-mode U acting on the lower rail, and I ignore a factor of two in the phase - be careful!

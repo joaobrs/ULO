@@ -12,9 +12,9 @@ print simulator.basis.hilbert_space_dimension
 simulator.set_input_state(range(P))
 phases = random.uniform(0, pi*2, len(circuit.phaseshifters))
 circuit.set_phases(phases)
-if not os.path.exists('circuit.pdf'): circuit.draw('circuit.pdf')
+circuit.draw('circuit.pdf')
 
 # Go
-number_of_terms=1000
-patterns=[random.randint(0, M, P) for i in range(number_of_terms)]
-print simulator.get_probabilities(patterns=patterns).round(4)
+#number_of_terms=1000
+#patterns=[random.randint(0, M, P) for i in range(number_of_terms)]
+#print simulator.get_probabilities(patterns=patterns).round(4)

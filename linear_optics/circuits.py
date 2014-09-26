@@ -107,11 +107,11 @@ class phaseshifter:
     def draw(self, axis, text=True):
         ''' draw the splitter '''
         l=.1
-        xo=np.sin(self.phi)*.1
-        yo=np.cos(self.phi)*.1
+        xo=np.sin(self.phi)*.3
+        yo=np.cos(self.phi)*.3
         x,y = (self.x, self.y) if self.invert else (self.x, self.y+1)
         axis.plot([x+.5], [y], 'k.', zorder=150)
-        p=axis.plot([x+.5, x+.5+xo], [y, y-yo], lw=1, color='red', zorder=100)
+        p=axis.plot([x+.5-xo, x+.5+xo], [y+yo, y-yo], lw=1, color='red', zorder=100)
         
         if text:
             axis.text(self.x+.5, self.y+.8, 'P%d' % self.index, color='#4444ff', fontsize=5, ha='center', va='center')
@@ -265,6 +265,7 @@ class reck_scheme(beamsplitter_network):
     ''' builds beamsplitter networks according to reck et al'''
     def __init__(self, nmodes, dense_phase_shifters=False):
         ''' dense phase shifters gives us more PS than we strictly need '''
+        print 'DO NOT TRUST THIS IMPLEMENTATION OF THE RECK SCHEME!'
         self.name='reck scheme'
         self.nmodes=nmodes
         self.dense_phase_shifters=dense_phase_shifters
@@ -284,9 +285,10 @@ class reck_scheme(beamsplitter_network):
             phase_y=lambda x: range(0,x+1,2) if x%2==0 else []
 
         for y in phase_y(height):
-            self.add_phaseshifter(x,self.nmodes-2-y, invert=True)
+            self.add_phaseshifter(x*2+1,self.nmodes-2-y, invert=True)
+
         for y in splitter_y(height):
-            self.add_beamsplitter(x,self.nmodes-2-y)
+            self.add_beamsplitter(x*2,self.nmodes-2-y)
 
     def build(self):
         ''' build the structure '''
