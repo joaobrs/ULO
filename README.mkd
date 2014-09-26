@@ -1,7 +1,14 @@
-A stripped-down implementation of the linear-optics simulator built into [http://github.com/peteshadbolt/qy](qy).
+This is stripped-down implementation of the linear-optics simulator built into [http://github.com/peteshadbolt/qy](qy). It will hopefully be easier to build, install, and maintain.
 
 **YOU CAN GET THIS CODE, TOGETHER WITH PRECOMPILED BINARIES, HERE:
 [http://www.peteshadbolt.co.uk/public/loqc-simulator.zip](http://www.peteshadbolt.co.uk/public/loqc-simulator.zip)**
+**THIS IS THE EASIEST WAY TO START SIMULATING STUFF**
+
+You will need:
+    - [Python27](https://www.python.org/download/releases/2.7/)
+    - [numpy](http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy)
+    - [matplotlib](http://www.lfd.uci.edu/~gohlke/pythonlibs/#matplotlib)
+    - (optionally) [progressbar](https://pypi.python.org/pypi/progressbar/2.2)
 
 Alternatively you can build it from the source provided here.
 Caveats:
