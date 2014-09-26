@@ -4,13 +4,8 @@ This is stripped-down implementation of the linear-optics simulator built into [
 [http://www.peteshadbolt.co.uk/public/loqc-simulator.zip](http://www.peteshadbolt.co.uk/public/loqc-simulator.zip)**
 **THIS IS THE EASIEST WAY TO START SIMULATING STUFF**
 
-You will need:
-    - [Python27](https://www.python.org/download/releases/2.7/)
-    - [numpy](http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy)
-    - [matplotlib](http://www.lfd.uci.edu/~gohlke/pythonlibs/#matplotlib)
-    - (optionally) [progressbar](https://pypi.python.org/pypi/progressbar/2.2)
+You will need [Python27](https://www.python.org/download/releases/2.7/), [numpy](http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy), [matplotlib](http://www.lfd.uci.edu/~gohlke/pythonlibs/#matplotlib), and (optionally) [progressbar](https://pypi.python.org/pypi/progressbar/2.2).
 
-Alternatively you can build it from the source provided here.
-Caveats:
+**Caveats:**
    - Do not trust my implementation of the Reck scheme! Comments welcome.
    - I usually define phaseshifters as a 2-mode U acting on the lower rail, and I ignore a factor of two in the phase - be careful!
