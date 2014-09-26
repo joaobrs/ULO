@@ -1,0 +1,1 @@
+A stripped-down implementation of the linear-optics simulator built into [http://github.com/peteshadbolt/qy](qy).
