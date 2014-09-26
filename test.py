@@ -15,6 +15,6 @@ circuit.set_phases(phases)
 circuit.draw('circuit.pdf')
 
 # Go
-#number_of_terms=1000
-#patterns=[random.randint(0, M, P) for i in range(number_of_terms)]
-#print simulator.get_probabilities(patterns=patterns).round(4)
+number_of_terms=1000
+patterns=[random.randint(0, M, P) for i in range(number_of_terms)]
+print simulator.get_probabilities(patterns=patterns).round(4)
