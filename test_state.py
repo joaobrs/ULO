@@ -2,8 +2,8 @@ import linear_optics as lo
 from numpy import *
 import os
 
-P=10
-M=20
+P=5
+M=5
 
 # Get ready
 circuit=lo.reck_scheme(M)
@@ -14,6 +14,5 @@ phases = random.uniform(0, pi*2, len(circuit.phaseshifters))
 circuit.set_phases(phases)
 
 # Go
-number_of_terms=1000
 print simulator.get_output_state()
 
