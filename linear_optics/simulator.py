@@ -38,26 +38,21 @@ class state:
 
     def __getitem__(self, key):
         ''' Allow basic square-bracket indexing '''
-        if not tuple(key) in self.vector: 
-            return 0
-        elif isinstance(key, int):
-            return self.vector[key]
-        elif isinstance(key, list) or isinstance(key, tuple):
-            return self.vector[self.basis[key]]
-        else:
-            raise TypeError, 'Invalid state index'
+        try:
+            key=self.basis[tuple(key)]
+            return self.vector[key] if key in self.vector else 0
+        except TypeError:
+            return self.vector[key] if key in self.vector else 0
 
     def __setitem__(self, key, value):
         ''' Allow basic square-bracket indexing '''
-        if isinstance(key, int):
-            self.nonzero_terms.add(key)
-            self.vector[key]=value
-        elif isinstance(key, list) or isinstance(key, tuple):
-            index=self.basis[key]
+        try:
+            index=self.basis[tuple(key)]
             self.nonzero_terms.add(index)
             self.vector[index]=value
-        else:
-            raise TypeError, 'Invalid state index'
+        except TypeError:
+            self.nonzero_terms.add(key)
+            self.vector[key]=value
 
     def __str__(self):
         s=''
