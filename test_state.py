@@ -2,9 +2,6 @@ import linear_optics as lo
 from numpy import *
 import os
 
-def f(x):
-    return y
-
 P=10
 M=20
 
