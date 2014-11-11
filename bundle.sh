@@ -16,5 +16,5 @@ cp $PERM/build/lib.linux-x86_64-2.7/perm.so ./linear_optics
 cp $PERM/build/lib.win32-2.7/perm.pyd ./linear_optics
 
 rm ./**/*.pyc
-rm bundle.zip
-zip -r bundle.zip ./*
+rm loqc-simulator.zip
+zip -r loqc-simulator.zip ./*
