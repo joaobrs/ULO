@@ -1,5 +1,9 @@
+#μLO
+
 A self-contained linear optics simulator in a single file. 
 Here the emphasis is on easy of use and readability, over performance.
+
+Still very much a work in progress.
 
 Circuits are described by JSON files. A tool to rapidly prototype these circuits is on the way...
 
