@@ -1,11 +1,22 @@
 #μLO
 
-A self-contained linear optics simulator in a single file. 
-Here the emphasis is on easy of use and readability, over performance.
+A linear optics simulator in one file. 
+Emphasis is on easy of use and readability over performance.
+Still a work in progress.
 
-Still very much a work in progress.
+You will need [Python27](https://www.python.org/download/releases/2.7/) and [numpy](http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy)
 
-Circuits are described by JSON files. A tool to rapidly prototype these circuits is on the way...
+Circuits are described by JSON files. A tool to rapidly prototype these circuits is on the way.
 
-You will need [Python27](https://www.python.org/download/releases/2.7/), [numpy](http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy)
-
+```json
+[{'pos': {'x': -8, 'y': 0}, 'type': 'bellpair'},
+ {'pos': {'x': -8, 'y': 5}, 'type': 'sps'},
+ {'pos': {'x': -7, 'y': 0}, 'type': 'crossing'},
+ {'pos': {'x': -5, 'y': 1}, 'ratio': 0.5, 'type': 'coupler'},
+ {'pos': {'x': -3, 'y': 2}, 'type': 'crossing'},
+ {'pos': {'x': -1, 'y': 4}, 'type': 'crossing'},
+ {'pos': {'x': 0, 'y': 0}, 'type': 'bucket'},
+ {'pos': {'x': 0, 'y': 2}, 'type': 'bucket'},
+ {'pos': {'x': 0, 'y': 4}, 'type': 'bucket'}]
+ ```
+ 
