@@ -1,4 +1,5 @@
-This is stripped-down implementation of the linear-optics simulator built into [http://github.com/peteshadbolt/qy](qy). It will hopefully be easier to build, install, and maintain.
+A self-contained linear optics simulator in a single file. 
+Here the emphasis is on easy of use and readability, over raw performance.
 
 **YOU CAN GET THIS CODE, TOGETHER WITH PRECOMPILED BINARIES, HERE:**
 
@@ -6,6 +7,7 @@ This is stripped-down implementation of the linear-optics simulator built into [
 
 You will need [Python27](https://www.python.org/download/releases/2.7/), [numpy](http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy), [matplotlib](http://www.lfd.uci.edu/~gohlke/pythonlibs/#matplotlib), and (optionally) [progressbar](https://pypi.python.org/pypi/progressbar/2.2).
 
-**Caveats:**
-   - Do not trust my implementation of the Reck scheme! Comments welcome.
-   - I usually define phaseshifters as a 2-mode U acting on the lower rail, and I ignore a factor of two in the phase - be careful!
+The `c-source` folder contains `C` code which compiles to a much faster implementation of the permanent.
+
+# TODO:
+Do not trust my implementation of the Reck scheme! Comments welcome.
