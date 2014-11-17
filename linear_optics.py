@@ -3,14 +3,13 @@
 import numpy as np
 import itertools as it
 from collections import defaultdict
-from operator import mul, add
+from operator import add
 from pprint import pprint
 try: 
     from permanent import permanent
 except ImportError:
     print "Fell back to a slow implementation of the permanent.\nSee http://github.com/peteshadbolt/permanent"
     def permanent(a): r=range(len(a)); return sum([np.prod(a[r, p]) for p in it.permutations(r)])
-
 
 ir2=1/np.sqrt(2)
 factorial = (1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800, 39916800)
@@ -29,17 +28,14 @@ def directional_coupler(ratio): r = 1j*np.sqrt(ratio); t = np.sqrt(1-ratio); ret
 def phase_shifter(phase): return np.array([[np.exp(1j*phase)]])
 def bell_state(y): return {(y, y+2):ir2, (y+1, y+3):ir2}
 
-def choose(n, k):
-    """ N choose K """
-    if n<k: return 0
-    return int(reduce(mul, ((i+k)/i for i in range(1, n-k+1))) + .5)
+def choose(n, k): return 0 if n<k else int(np.prod([(i+k)/i for i in range(1, n-k+1)]) + .5)
 
 def normalization(modes):
     """ Compute the normalization constant """
     table = defaultdict(int)
     for mode in modes:
         table[mode] += 1
-    return reduce(mul, (factorial[t] for t in table.values()))
+    return np.prod([factorial[t] for t in table.values()])
 
 def modes_to_index(modes, p, m):
     """ Maps a list of positions of p photons in m modes to an index.  After Nick Russel.  """
@@ -112,7 +108,6 @@ def simulate(input_state, unitary, patterns, mode="probability", **kwargs):
 
 if __name__=="__main__":
     """ Test out the simulator """
-
     data = [{"type":"bellpair","pos":{"x":-8,"y":0}},{"type":"sps","pos":{"x":-8,"y":5}},{"type":"crossing","pos":{"x":-7,"y":0}},{"type":"coupler","pos":{"x":-5,"y":1},"ratio":0.5},{"type":"crossing","pos":{"x":-3,"y":2}},{"type":"crossing","pos":{"x":-1,"y":4}},{"type":"bucket","pos":{"x":0,"y":0}},{"type":"bucket","pos":{"x":0,"y":2}},{"type":"bucket","pos":{"x":0,"y":4}}] 
 
     circuit = compile_circuit(data)
