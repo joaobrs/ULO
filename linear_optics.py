@@ -85,12 +85,13 @@ def compile_circuit(json):
     input_state = dtens(*s)
     nphotons = 0 if len(input_state) == 0 else len(input_state.keys()[0])
     p = [c["pattern"] for c in components if "pattern" in c]
+    if p==[]: p = range(nmodes)
     patterns = list(it.combinations_with_replacement(p, nphotons))
 
     # Return a compiled representation of the state
     return {"input_state": input_state, "unitary":unitary, "patterns":patterns, "nmodes":nmodes, "nphotons":nphotons}
 
-def simulate(input_state, unitary, patterns, mode="probability", **kwargs): 
+def simulate(input_state, unitary, patterns, mode="amplitude", **kwargs): 
     """ Simulates a given circuit, for a given input state, looking at certain terms in the output state """
     output_state=defaultdict(complex)
     for cols, amplitude in input_state.items():
@@ -109,6 +110,7 @@ def simulate(input_state, unitary, patterns, mode="probability", **kwargs):
 if __name__=="__main__":
     """ Test out the simulator """
     data = [{"type":"bellpair","pos":{"x":-8,"y":0}},{"type":"sps","pos":{"x":-8,"y":5}},{"type":"crossing","pos":{"x":-7,"y":0}},{"type":"coupler","pos":{"x":-5,"y":1},"ratio":0.5},{"type":"crossing","pos":{"x":-3,"y":2}},{"type":"crossing","pos":{"x":-1,"y":4}},{"type":"bucket","pos":{"x":0,"y":0}},{"type":"bucket","pos":{"x":0,"y":2}},{"type":"bucket","pos":{"x":0,"y":4}}] 
+    pprint(data)
 
     circuit = compile_circuit(data)
 
