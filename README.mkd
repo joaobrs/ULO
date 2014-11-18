@@ -17,9 +17,9 @@ Circuits are described in JSON format. A [tool](http://github.com/peteshadbolt/l
                {'type': 'crossing', 'pos': {'x': 4, 'y': 4}}]
 >>> circuit = lo.compile(circuit)
 >>> pprint(circuit)
-{'input_state': defaultdict(<type 'complex'>, {(1, 3, 5): 0.70710678118654746, (0, 2, 5): 0.70710678118654746}),
- 'nmodes': 6, 'nphotons': 3,
- 'patterns': [(0, 0, 0), (0, 0, 1), (0, 0, 2), ... (5, 5, 5)],
+{'input_state': defaultdict(<type 'complex'>, {(1, 3, 5): 0.70710678118654746,
+                                               (0, 2, 5): 0.70710678118654746}),
+ 'nmodes': 6, 'nphotons': 3, 'patterns': [(0, 0, 0), (0, 0, 1), (0, 0, 2), ... (5, 5, 5)],
  'unitary': array([[ 1.+0.j,  0.+0.j,  0.+0.j,  0.+0.j,  0.+0.j,  0.+0.j],
                    [ 0.+0.j,  0.+0.j,  0.+1.j,  0.+0.j,  0.+0.j,  0.+0.j],
                    ...
