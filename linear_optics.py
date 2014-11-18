@@ -14,7 +14,7 @@ ir2=1/np.sqrt(2)
 factorial = (1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800, 39916800)
 
 spec = {"coupler":      { "size":2,  "unitary": lambda p: directional_coupler(p["ratio"]) },
-        "phaseshifter": { "size":2,  "unitary": lambda p: phase_shifter(p["phase"]) },
+        "phaseshifter": { "size":1,  "unitary": lambda p: phase_shifter(p["phase"]) },
         "crossing":     { "size":2,  "unitary": lambda p: np.array([[0,1],[1,0]]) },
         "sps":          { "size":1,  "state": lambda p: {(p["pos"]["y"],): 1} },
         "bellpair":     { "size":4,  "state": lambda p: bell_state(p["pos"]["y"]) },
@@ -90,7 +90,7 @@ def compile_circuit(json):
     # Return a compiled representation of the state
     return {"input_state": input_state, "unitary":unitary, "patterns":patterns, "nmodes":nmodes, "nphotons":nphotons}
 
-def simulate(input_state, unitary, patterns, mode="amplitude", **kwargs): 
+def simulate(input_state, unitary, patterns, mode="probability", **kwargs): 
     """ Simulates a given circuit, for a given input state, looking at certain terms in the output state """
     output_state=defaultdict(complex)
     for cols, amplitude in input_state.items():
