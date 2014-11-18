@@ -9,12 +9,12 @@ Circuits are described in JSON format. A [tool](http://github.com/peteshadbolt/l
 ```python
 >>> import linear_optics as lo
 >>> circuit = [{'type': 'bellpair', 'pos': {'x': 0, 'y': 0}},
-               {'type': 'sps', 'pos': {'x': 0, 'y': 5}},
-               {'type': 'phaseshifter', 'pos': {'x': 2, 'y': 0}, 'phase':0},
-               {'type': 'coupler', 'pos': {'x': 2, 'y': 1}, 'ratio': 0.5},
-               {'type': 'coupler', 'pos': {'x': 3, 'y': 1}, 'ratio': 0.5},
-               {'type': 'crossing', 'pos': {'x': 2, 'y': 2}},
-               {'type': 'crossing', 'pos': {'x': 4, 'y': 4}}]
+...            {'type': 'sps', 'pos': {'x': 0, 'y': 5}},
+...            {'type': 'phaseshifter', 'pos': {'x': 2, 'y': 0}, 'phase':0},
+...            {'type': 'coupler', 'pos': {'x': 2, 'y': 1}, 'ratio': 0.5},
+...            {'type': 'coupler', 'pos': {'x': 3, 'y': 1}, 'ratio': 0.5},
+...            {'type': 'crossing', 'pos': {'x': 2, 'y': 2}},
+...            {'type': 'crossing', 'pos': {'x': 4, 'y': 4}}]
 >>> circuit = lo.compile(circuit)
 >>> pprint(circuit)
 {'input_state': defaultdict(<type 'complex'>, {(1, 3, 5): 0.70710678118654746,
@@ -25,6 +25,8 @@ Circuits are described in JSON format. A [tool](http://github.com/peteshadbolt/l
                    ...
                    [ 0.+0.j,  0.+0.j,  0.+0.j,  1.+0.j,  0.+0.j,  0.+0.j]])}
 >>> output_state = lo.simulate(**circuit)
->>> ["|%s> - %.3f" % t for t in output_state.items() if t[1]>0]
-[((3, 3, 4), 0.25), ((0, 2, 4), 0.49999999999999989), ((1, 1, 4), 0.25)]
+>>> for key, value in sorted(output_state.items(), key=lambda x:x[0]):
+...            if abs(value)>0: print "|%s> : %s" % (key, value)
+|(0, 1, 4)> : 0.707106781187j
+|(2, 4, 5)> : 0.707106781187j
 ```
