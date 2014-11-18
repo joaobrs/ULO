@@ -64,7 +64,7 @@ def fill_gaps(component):
         component[key] = value(component) if callable(value) else value
     return component
 
-def compile_circuit(json):
+def compile(json):
     """ Compiles a JSON description of a circuit to a state, unitary and a bunch of detection patterns """
     components = map(fill_gaps, json)
     components.sort(key=lambda c: c["x"])
