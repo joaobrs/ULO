@@ -1,12 +1,10 @@
 #μLO
 
-A linear optics simulator in one file. 
-Emphasis is on easy of use and readability over performance.
-Still a work in progress.
+A linear optics simulator in one file. Still a work in progress.
 
 You will need [Python27](https://www.python.org/download/releases/2.7/) and [numpy](http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy)
 
-Circuits are described in JSON format. A [tool](http://github.com/peteshadbolt/lojs) to rapidly prototype these circuits is on the way.
+Circuits are described in JSON format. A [tool](http://github.com/peteshadbolt/lojs) to rapidly design and test circuits is on the way.
 
 ```python
 >>> import linear_optics as lo
@@ -18,8 +16,8 @@ Circuits are described in JSON format. A [tool](http://github.com/peteshadbolt/l
 ...  {'type': 'coupler', 'pos': {'x': 3, 'y': 1}, 'ratio': 0.5},
 ...  {'type': 'crossing', 'pos': {'x': 2, 'y': 2}},
 ...  {'type': 'crossing', 'pos': {'x': 4, 'y': 4}}]
->>> circuit=lo.compile_circuit(circuit)
->>> output_state=lo.simulate(**circuit)
+>>> circuit = lo.compile_circuit(circuit)
+>>> output_state = lo.simulate(**circuit)
 >>> ["|%s> - %.3f" % t for t in output_state.items() if t[1]>0]
 [((3, 3, 4), 0.25), ((0, 2, 4), 0.49999999999999989), ((1, 1, 4), 0.25)]
 ```
