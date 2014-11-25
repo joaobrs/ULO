@@ -57,12 +57,13 @@ def dinner(a,b):
 
 def fill_gaps(component):
     """ Fills the gaps (size, unitary, state) in a dictionary representing a component. """
-    ctype = component["type"]
+    c=component.copy()
+    ctype = c["type"]
     for key, value in spec[ctype].items():
-        component[key] = value(component) if callable(value) else value
+        c[key] = value(c) if callable(value) else value
     for key, value in prototype.items():
-        component[key] = value(component) if callable(value) else value
-    return component
+        c[key] = value(c) if callable(value) else value
+    return c
 
 def compile(json):
     """ Compiles a JSON description of a circuit to a state, unitary and a bunch of detection patterns """

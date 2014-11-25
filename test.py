@@ -11,8 +11,10 @@ circuit = [{'type': 'bellpair', 'pos': {'x': 0, 'y': 0}},
   {'type': 'crossing', 'pos': {'x': 4, 'y': 4}}]
 
 circuit = lo.compile(circuit)
+pprint(circuit)
+
 output_state = lo.simulate(**circuit)
 
 for key, value in sorted(output_state.items(), key=lambda x:x[0]):
-    if abs(value)>0: print "|%s> : %.2f" % (key, abs(value))
+    if abs(value)>0: print "|%s> : %s" % (key, value)
 
