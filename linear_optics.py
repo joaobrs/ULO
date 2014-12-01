@@ -94,7 +94,6 @@ def compile(json):
         patterns.update(it.product(*termpatterns))
     patterns=list(patterns)
 
-
     # Return a compiled representation of the state
     return {"input_state": input_state, "unitary":unitary, "patterns":patterns, "nmodes":nmodes, "nphotons":nphotons}
 
