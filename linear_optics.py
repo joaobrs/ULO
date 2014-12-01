@@ -88,14 +88,12 @@ def compile(json):
 
     # Find all nonzero patterns by classical (fast) means
     u2=np.abs(unitary**2)
-    patterns=[]
+    patterns=set()
     for key, value in input_state.items():
-        termpatterns = []
-        for photon in key:
-            row=u2[photon]
-            pattern = [i for i in range(nmodes) if row[i]>precision]
-            termpatterns.append(pattern)
-        patterns+=list(it.product(*termpatterns))
+        termpatterns = [[i for i in range(nmodes) if u2[row][i]>precision] for row in key]
+        patterns.update(it.product(*termpatterns))
+    patterns=list(patterns)
+
 
     # Return a compiled representation of the state
     return {"input_state": input_state, "unitary":unitary, "patterns":patterns, "nmodes":nmodes, "nphotons":nphotons}
