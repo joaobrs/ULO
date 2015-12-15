@@ -4,13 +4,8 @@ import numpy as np
 import itertools as it
 from collections import defaultdict
 from operator import add
-try:
-    from permanent import permanent
-except ImportError:
-    print "Fell back to a slow implementation of the permanent.\nSee http://github.com/peteshadbolt/permanent"
-    def permanent(a):
-        r = range(len(a))
-        return sum([np.prod(a[r, p]) for p in it.permutations(r)])
+from permanent import permanent
+import fock_rules
 
 ir2 = 1 / np.sqrt(2)
 factorial = (1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800, 39916800)
@@ -20,29 +15,39 @@ spec = {
     "coupler":      {"size": 2,  "unitary": lambda p: directional_coupler(p["ratio"])},
     "phaseshifter": {"size": 1,  "unitary": lambda p: phase_shifter(p["phase"])},
     "crossing":     {"size": 2,  "unitary": lambda p: np.array([[0, 1], [1, 0]])},
-    "source":       {"size": 1,  "state": lambda p: {(p["y"],): 1}},
     "bellpair":     {"size": 4,  "state": lambda p: bell_state(p["y"])},
-    "detector":     {"size": 1, "pattern": lambda p: p["y"]}}
+    "fockstate":    {"size": 1,  "state": lambda p: fock_state(p["y"], p["n"])},
+    "detector":     {"size": 1, "pattern": lambda p: p["y"]},
+    "herald":       {"size": 1, "herald": lambda p: p["y"]}}
 
 prototype = {"bottom": lambda p: p["y"] + p["size"],
              "x": lambda p: p["x"], "y": lambda p: p["y"]}
 
 
 def directional_coupler(ratio):
+    """ Unitary matrix for a directional coupler """
     r = 1j * np.sqrt(ratio)
     t = np.sqrt(1 - ratio)
     return np.array([[t, r], [r, t]])
 
 
 def phase_shifter(phase):
+    """ Unitary matrix for a phase shifter """
     return np.array([[np.exp(1j * phase)]])
 
 
 def bell_state(y):
+    """ Dict representation of a Bell state """
     return {(y, y + 2): ir2, (y + 1, y + 3): ir2}
 
 
+def fock_state(y, n):
+    """ Dict representation of a Fock state """
+    return {tuple([y] * n): 1}
+
+
 def choose(n, k):
+    """ Ya this is just N choose K """
     return 0 if n < k else int(np.prod([(i + k) / i for i in range(1, n - k + 1)]) + .5)
 
 
@@ -64,6 +69,8 @@ def modes_to_index(modes, p, m):
 def dtens(*terms):
     """ The tensor product, defined for states represented as dicts """
     output = defaultdict(complex)
+    if len(terms) == 0:
+        return {}
     for q in it.product(*(t.items() for t in terms)):
         keys, amps = zip(*q)
         newkey = tuple(sorted(reduce(add, keys)))
@@ -73,7 +80,7 @@ def dtens(*terms):
 
 def dinner(a, b):
     """ Inner product of states represented as dicts """
-    return sum([a[key] * b[key] for key in set(a.keys() + b.keys())])
+    return sum([np.conj(a[key]) * b[key] for key in set(a.keys() + b.keys())])
 
 
 def fill_gaps(component):
@@ -87,11 +94,12 @@ def fill_gaps(component):
     return c
 
 
-def compile(json):
+def compile(json, rules=""):
     """ Compiles a JSON description of a circuit to a state, unitary and a bunch of detection patterns """
     components = map(fill_gaps, json)
     components.sort(key=lambda c: c["x"])
-    nmodes = max([c["bottom"] for c in components])
+    nmodes = max([c["bottom"]
+                 for c in components]) if len(components) > 0 else 0
 
     # Compute the linear-optical unitary matrix
     unitary = np.eye(nmodes, dtype=complex)
@@ -108,20 +116,17 @@ def compile(json):
     input_state = dtens(*s)
     nphotons = 0 if len(input_state) == 0 else len(input_state.keys()[0])
 
-    # TODO: Find all nonzero patterns by classical (fast) means
-    p = [c["pattern"] for c in components if "pattern" in c]
-    if p == []:
-        p = range(nmodes)
-    patterns = tuple(it.combinations_with_replacement(p, nphotons))
+    # Parse the rule string
+    rules = fock_rules.parse_rules(rules)
+    patterns = list(fock_rules.generate_terms(rules, nmodes, nphotons))
 
     # Return a compiled representation of the state
-    return {"input_state": input_state, "unitary": unitary, "patterns": patterns, "nmodes": nmodes, "nphotons": nphotons}
+    return {"input_state": input_state, "unitary": unitary, "patterns": patterns}
 
 
-def simulate(input_state, unitary, patterns, mode="probability", **kwargs):
+def get_amplitudes(input_state, unitary, patterns):
     """ Simulates a given circuit, for a given input state, looking at certain terms in the output state """
     output_state = defaultdict(complex)
-    u2 = np.abs(unitary) ** 2
     for cols, amplitude in input_state.items():
         cols = list(cols)
         n1 = normalization(cols)
@@ -129,14 +134,12 @@ def simulate(input_state, unitary, patterns, mode="probability", **kwargs):
             n2 = normalization(rows)
             perm = permanent(unitary[list(rows)][:, cols])
             value = amplitude * perm / np.sqrt(n1 * n2)
-            if value != 0:
+            if np.abs(value) > precision:
                 output_state[rows] += value
-
-    if mode == "probability":
-        for key, value in output_state.items():
-            output_state[key] = np.abs(value) ** 2
     return output_state
 
-if __name__ == "__main__":
-    import test
-    test.test()
+
+def get_probabilities(input_state, unitary, patterns):
+    """ Get probabilities"""
+    output_state = get_amplitudes(input_state, unitary, patterns)
+    return defaultdict(float, {key: np.abs(value) ** 2 for key, value in output_state.items()})
