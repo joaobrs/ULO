@@ -64,21 +64,22 @@ class Circuit(object):
         """ Build the circuit """
         pass
 
+def polarization_qubit(i):
+    return ("h%d" % i, "v%d" % i)
 
 class Terry(Circuit):
-    basis = PolarizationBasis()
-
     def build(self):
         """ Terry's circuit """
         for i in range(8):
-            self.add(Photon("h0"))
+            self.add(Photon("h%d" % i))
 
         for i in range(4):
-            self.add(FusionII(i, i + 1))
+            a, b = polarization_qubit(i), polarization_qubit(i+1)
+            self.add(FusionII(a, b))
 
-        self.add(FusionII(1, 2))
-        self.add(FusionII(5, 6))
-        self.add(FusionII(2, 5))
+        self.add(FusionII("h1", "v1", "h2", "v2"))
+        self.add(FusionII("h5", "v5", "h6", "v6"))
+        self.add(FusionII("h2", "v2", "h5", "v5"))
 
         self.add(Herald("h1", "h2", "h5", "h6"))
 

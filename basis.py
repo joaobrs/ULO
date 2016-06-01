@@ -23,13 +23,13 @@ class Path(Naming):
 class Polarization(Naming):
 
     def fwd(self, index):
-        return "{}{}".format("HV"[index%2], index/2)
+        return "{}{}".format("HV"[index % 2], index / 2)
 
     def back(self, name):
-        return int(name[1:])*2 + (name[0] == "H")
+        return int(name[1:]) * 2 + (name[0] == "H")
+
 
 if __name__ == '__main__':
     # l = Label(0, "H0")
     n = Path()
     print n
-
