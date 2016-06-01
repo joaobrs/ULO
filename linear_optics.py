@@ -1,14 +1,8 @@
 """ pete.shadbolt@gmail.com """
 
 import itertools as it
-from permanent import permanent
-import numpy as np
+import lomath
 
-ir2 = 1 / np.sqrt(2)
-factorial = (1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800, 39916800)
-
-def choose(n, k):
-    return 0 if n < k else int(np.prod([(i + k) / i for i in range(1, n - k + 1)]) + .5)
 
 class State(dict):
 
@@ -72,19 +66,19 @@ class Circuit(object):
 
 
 class Terry(Circuit):
-    basis = PolarizationBasis(8)
+    basis = PolarizationBasis()
 
     def build(self):
         """ Terry's circuit """
         for i in range(8):
-            self.add(Photon, ("0h"))
+            self.add(Photon("h0"))
 
         for i in range(4):
-            self.add(FusionII, (i, i + 1))
+            self.add(FusionII(i, i + 1))
 
-        self.add(FusionII, (1, 2))
-        self.add(FusionII, (5, 6))
-        self.add(FusionII, (2, 5))
+        self.add(FusionII(1, 2))
+        self.add(FusionII(5, 6))
+        self.add(FusionII(2, 5))
 
-        self.add(Herald, ("1h", "2h", "5h", "6h"))
+        self.add(Herald("h1", "h2", "h5", "h6"))
 
