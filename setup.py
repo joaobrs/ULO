@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name = "ulo",
-    version = "0.1.0",
+    version = "0.1.1",
     packages = ["ulo"],
     test_suite = "tests",
     author = "Pete Shadbolt",
