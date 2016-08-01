@@ -7,7 +7,7 @@
 
 This is the documentation for ``ulo``. It's a work in progress.
 
-``ulo`` is a Python package to simulate linear optical circuits 
+``ulo`` is a Python package to simulate linear optical circuits. It's based on a chunk of optimized C code that computes a lot of permanents.
 
 Installing
 -------------------------------
