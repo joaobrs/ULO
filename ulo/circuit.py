@@ -13,6 +13,7 @@ Here we implement a Circuit object which describes linear-optical circuits.
 
 import itertools as it
 from fractions import Fraction
+import numpy as np
 
 class Circuit(object):
 
@@ -29,7 +30,17 @@ class Circuit(object):
         return it.chain(*(c.decompose(remapped) for c in self.components))
 
     def get_unitary(self):
-        return [(u, modes) for u, modes in self.decompose()]
+        """ Get the unitary for this circuit """
+        modes = set(it.chain(*(m for n, u, m in self.decompose())))
+        output = np.eye(len(modes), dtype=complex)
+        for n, u, m in self.decompose():
+            output[list(m)] = np.dot(u, output[list(m)])
+        return output
+
+    def show_decomposition(self):
+        """ Useful to check decompositions """
+        print "\n".join("{} {}".format(n, m) for n, u, m in self.decompose())
+
 
     def set_parameter(self, key, values):
         """ Will go and set all the reflectvities, phases, etc """
@@ -47,8 +58,8 @@ class Circuit(object):
 
 class Component(Circuit):
     def decompose(self, modes=None):
-        remapped = [modes[i] for i in self.modes] if modes else self.modes
-        return ((self.get_unitary(), remapped),)
+        remapped = tuple([modes[i] for i in self.modes] if modes else self.modes)
+        return ((self.__class__.__name__, self.get_unitary(), remapped),)
 
     def set_parameter(self, key, values):
         if hasattr(self, key):
@@ -57,14 +68,16 @@ class Component(Circuit):
 class Beamsplitter(Component):
     """ A simple beamsplitter """
 
-    reflectivity = 0.5
+    ratio = 0.5
 
     def get_unitary(self):
-        return "bsu {}".format(self.reflectivity)
+        r = 1j*np.sqrt(self.ratio)
+        t = np.sqrt(1-self.ratio) 
+        return np.array([[t, r], [r, t]])
 
     def __str__(self):
-        rf = Fraction(str(self.reflectivity)).limit_denominator()
-        return "Beamsplitter {}, reflectivity = {}".format(self.modes, rf)
+        rf = Fraction(str(self.ratio)).limit_denominator()
+        return "Beamsplitter {}, ratio = {}".format(self.modes, rf)
 
 
 class Phase(Component):
@@ -73,7 +86,7 @@ class Phase(Component):
     phi = 0
 
     def get_unitary(self):
-        return "phase"
+        return np.array([[np.exp(1j*phi)]])
 
     def __str__(self):
         ph = Fraction(str(self.phi/np.pi)).limit_denominator()
@@ -85,7 +98,7 @@ class Swap(Component):
     """ Swaps two modes -- easy to make a PBS like this """
 
     def get_unitary(self):
-        return "swpu"
+        return np.array([[0, 1], [1, 0]], dtype=complex)
 
 
 class BSPair(Circuit):
@@ -112,13 +125,10 @@ class MZI(Circuit):
     components = [Phase(0), Beamsplitter(0), Phase(0), Beamsplitter(0), Phase(0)]
 
 if __name__ == '__main__':
-    class Test(Circuit):
-        components = [Beamsplitter(0), Beamsplitter(1)]
-
-    t = Test()
-    t.set_parameter("reflectivity", [.69, .5])
-    print t.get_unitary()
-
     c = TwoFusions()
-    print c
+    c.show_decomposition()
+    u = c.get_unitary()
+
+    print np.dot(u, u)
+    # TODO: why not producing the identity?
 
