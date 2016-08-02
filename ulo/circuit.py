@@ -21,7 +21,6 @@ class Circuit(object):
 
     def __init__(self, *modes, **kwargs):
         self.modes = modes
-        self.args = kwargs
 
     def decompose(self, modes=None):
         """ Get the unitary matrix of this circuit """
@@ -33,13 +32,12 @@ class Circuit(object):
 
     def set_parameter(self, key, values):
         """ Will go and set all the reflectvities, phases, etc """
-        values = values if iterable(values) else (
-            value for component in self.components)
-        for component, value in zip(self.components):
-            component.args[key] = value
+        values = it.cycle(values)
+        for c in self.components:
+            c.set_parameter(key, values)
 
     def __str__(self):
-        s = "{} {} {}".format(self.__class__.__name__, self.modes, self.args)
+        s = "{} {}".format(self.__class__.__name__, self.modes)
         for thing in self.components:
             for line in str(thing).split("\n"):
                 s += "\n.  " + line
@@ -49,14 +47,19 @@ class Circuit(object):
 class Component(Circuit):
     def decompose(self, modes=None):
         remapped = [modes[i] for i in self.modes] if modes else self.modes
-        return ((self.get_unitary(**self.args), remapped),)
+        return ((self.get_unitary(), remapped),)
+
+    def set_parameter(self, key, values):
+        if hasattr(self, key):
+            setattr(self, key, values.next())
 
 class Beamsplitter(Component):
+    reflectivity = 0.5
 
     """ A simple beamsplitter """
 
     def get_unitary(self):
-        return "bsu"
+        return "bsu {}".format(self.reflectivity)
 
 
 class Phase(Component):
@@ -96,13 +99,24 @@ class TwoFusions(Circuit):
 class MZI(Circuit):
 
     """ A Mach-Zehnder interferometer, testing parametric circuits """
-    components = [Phase(0), Beamsplitter(
-        0), Phase(0), Beamsplitter(0), Phase(0)]
+    components = [Phase(0), 
+                  Beamsplitter(0), 
+                  Phase(0), 
+                  Beamsplitter(0), 
+                  Phase(0)]
 
 if __name__ == '__main__':
-    c = TwoFusions()
-    print c.get_unitary()
+    class Test(Circuit):
+        components = [Beamsplitter(0), Beamsplitter(1)]
+
+    t = Test()
+    t.set_parameter("reflectivity", [.69, .5])
+    print t.get_unitary()
+
+    #c = TwoFusions()
+    #c.set_parameter("reflectivity", 0)
+    #print c.get_unitary()
     #print list(c.decompose())
     #for u, m in c.decompose():
-        #print u, m
+    #print u, m
 
