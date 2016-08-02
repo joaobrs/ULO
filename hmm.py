@@ -1,4 +1,5 @@
 import numpy as np
+from fractions import Fraction
 
 class Beamsplitter(object):
 
@@ -10,7 +11,8 @@ class Beamsplitter(object):
         self.unitary = np.array([[cp, 1j*sp], [1j*sp, cp]], dtype=complex) 
 
     def __str__(self):
-        return "(Beamsplitter: {:.2f})".format(self.transmission)
+        fraction = Fraction(str(self.transmission)).limit_denominator(100)
+        return "(Beamsplitter: {} @ {} & {})".format(fraction, self.inputs[0], self.inputs[1])
 
 class PhaseShifter(object):
 
@@ -20,7 +22,8 @@ class PhaseShifter(object):
         self.unitary = np.array([[np.exp(1j*phase)]], dtype=complex)
 
     def __str__(self):
-        return "(Phasehifter: {:.2f})".format(self.phase)
+        fraction = Fraction(str(self.phase / np.pi)).limit_denominator(100)
+        return "(Phaseshifter: {} pi @ {})".format(self.phase, self.inputs[0])
 
 class Mapping(object):
 
@@ -36,21 +39,18 @@ class Mapping(object):
             self.unitary[t[a], t[b]] = 1
 
     def __str__(self):
-        return "(Mapping: {})".format(", ".join(str(m) for m in self.mapping))
+        return "(Mapping: {})".format(", ".join("{}->{}".format(*m) for m in self.mapping))
 
 class Circuit(object):
     def __init__(self):
         self.things = []
 
     def add(self, *things):
-        try:
-            self.things += things
-        except:
-            pass
+        self.things += things
 
     def __str__(self):
-        things = ", ".join(str(t) for t in self.things)
-        s = "({}: {})".format(self.__class__.__name__, things)
+        things = "\n".join(str(t) for t in self.things)
+        s = "({}:\n{})".format(self.__class__.__name__, things)
         return s
 
 class FusionII(Circuit):
