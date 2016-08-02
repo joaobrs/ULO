@@ -17,8 +17,8 @@ static PyObject *query(PyObject *self, PyObject *args) {
       /*return NULL;*/
   /*}*/
 
-  /*npy_complex128 c = npy_csqrt(a);*/
-  /*return PyComplex_FromDoubles(c.real, c.imag);*/
+  npy_complex a = npy_cpack(0, 1);
+  
 
   PyObject *output = PyDict_New();
   return output;

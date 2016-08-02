@@ -36,11 +36,22 @@ If you want to modify and test ``ulo`` without having to re-install, switch into
 Quickstart
 -------------------------------
 
+The easiest way to create a circuit is to subclass ``ulo.Circuit``::
+
+    >>> from ulo import Circuit, BS, Swap
+    >>> class FusionII(Circuit):
+    >>>     components = [BS(0, 1), BS(2, 3), Swap(1, 2), BS(0, 1), BS(2, 3)]
+    >>> ...
+    >>> circuit = FusionII()
+    >>> print circuit
+
+
 
 Using ``ulo``
 -------------------------------
 
-.. automodule:: ulo
+.. automodule:: ulo.circuit
+
 
 Reference
 -------------------------------

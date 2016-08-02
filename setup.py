@@ -18,6 +18,6 @@ setup(
     keywords="quantum",
     scripts=[],
     package_data={},
-    ext_modules=[core],
+    ext_modules=[],
     include_package_data=False
 )

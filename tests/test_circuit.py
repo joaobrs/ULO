@@ -1,30 +1,29 @@
 import numpy as np
-from ulo import Circuit
-
-def bsu(reflectivity):
-    """ Used for testing """
-    return "bsu({})".format(reflectivity)
+from ulo import Circuit, BS, Fusion
 
 def test_circuit():
-    c = Circuit(name="Test circuit")
-    assert c.name == "Test circuit"
+    """ Simple tests """
+    c = Circuit(0, 1)
+    assert str(c) == "Circuit (0, 1)"
+    assert c.modes == (0, 1)
+    assert list(c.decompose()) == []
+    assert np.allclose(c.get_unitary(), np.eye(2))
 
-def test_dynamic_beamsplitter():
-    """ This is a really wierd way of programming. Who can say if it is good? """
-    Beamsplitter = Circuit(name="Beamsplitter", unitary=bsu)
-    assert Beamsplitter(0, reflectivity="test").get_unitary() == ["bsu(test) @ 0"]
 
-class Circuit:
+def test_bs():
+    """ Beamsplitter tests """
+    b = BS()
+    target = np.array([[1, 1j], [1j, 1]])/np.sqrt(2)
+    assert np.allclose(b.get_unitary(), target)
 
-class BeamSplitter(circuit):
-    def __init__(self, reflectivity):
-        self.unitary = 
+    b.ratio = 0
+    assert np.allclose(b.get_unitary(), np.eye(2))
 
-class Fusion(Circuit):
-    components = [
-            DualBeamsplitter(1, 2, 3, 4), 
-            Swap(2, 3),
-            DualBeamsplitter(1, 2, 3, 4), 
-    ]
+
+def test_fusion():
+    """ Test that fusion makes sense """
+    c = Fusion()
+    u = c.get_unitary()
+    assert np.allclose(np.dot(np.transpose(np.conjugate(u)), u), np.eye(4)), "Fusion is unitary"
 
 
