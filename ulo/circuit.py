@@ -12,6 +12,7 @@ Here we implement a Circuit object which describes linear-optical circuits.
 """
 
 import itertools as it
+from fractions import Fraction
 
 class Circuit(object):
 
@@ -54,20 +55,29 @@ class Component(Circuit):
             setattr(self, key, values.next())
 
 class Beamsplitter(Component):
-    reflectivity = 0.5
-
     """ A simple beamsplitter """
+
+    reflectivity = 0.5
 
     def get_unitary(self):
         return "bsu {}".format(self.reflectivity)
 
+    def __str__(self):
+        rf = Fraction(str(self.reflectivity)).limit_denominator()
+        return "Beamsplitter {}, reflectivity = {}".format(self.modes, rf)
+
 
 class Phase(Component):
-
     """ A phase shifter """
+
+    phi = 0
 
     def get_unitary(self):
         return "phase"
+
+    def __str__(self):
+        ph = Fraction(str(self.phi/np.pi)).limit_denominator()
+        return "Phase {}, phi = {} pi".format(self.modes, ph)
 
 
 class Swap(Component):
@@ -99,11 +109,7 @@ class TwoFusions(Circuit):
 class MZI(Circuit):
 
     """ A Mach-Zehnder interferometer, testing parametric circuits """
-    components = [Phase(0), 
-                  Beamsplitter(0), 
-                  Phase(0), 
-                  Beamsplitter(0), 
-                  Phase(0)]
+    components = [Phase(0), Beamsplitter(0), Phase(0), Beamsplitter(0), Phase(0)]
 
 if __name__ == '__main__':
     class Test(Circuit):
@@ -113,10 +119,6 @@ if __name__ == '__main__':
     t.set_parameter("reflectivity", [.69, .5])
     print t.get_unitary()
 
-    #c = TwoFusions()
-    #c.set_parameter("reflectivity", 0)
-    #print c.get_unitary()
-    #print list(c.decompose())
-    #for u, m in c.decompose():
-    #print u, m
+    c = TwoFusions()
+    print c
 
