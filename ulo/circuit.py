@@ -1,3 +1,16 @@
+"""
+Here we implement a Circuit object which describes linear-optical circuits.
+
+.. todo:: 
+
+    Polarization is going to be a **layer on top of this**.
+
+.. todo:: 
+
+    Decide between relative and absolute mode labels
+
+"""
+
 
 class Circuit(object):
 
@@ -5,10 +18,11 @@ class Circuit(object):
         self.things = things
         self.name = kwargs.get("name", "Unnamed")
         self.unitary = kwargs.get("unitary", None)
-        self.modes = kwargs.get("modes", None)
+        self.modes = kwargs.get("modes", range(2))
 
     def __call__(self, *modes, **kwargs):
-        return Circuit(*self.things, name=self.name, unitary=self.unitary, modes=modes)
+        u = self.unitary(**kwargs) if callable(self.unitary) else self.unitary
+        return Circuit(*self.things, name=self.name, unitary=u, modes=modes)
 
     def __str__(self):
         s = "{} @ {}".format(self.name, ", ".join(map(str, self.modes)))
@@ -19,14 +33,14 @@ class Circuit(object):
 
     def get_unitary(self, modes=None):
         """ Get the unitary matrix for this circuit """
-        #print "getting unitary for {} {} {}".format(self.name, self.modes, modes)
-        if self.unitary:
-            #print modes, self.modes
-            return ["{} @ {}".format(self.unitary, ", ".join(str(modes[i]) for i in self.modes))]
+        remapped = [modes[i] for i in self.modes] if modes else self.modes
+        if self.unitary!=None:
+            u = self.unitary
+            return ["{} @ {}".format(u, ", ".join(map(str, remapped)))]
         else:
             pieces = []
             for thing in self.things:
-                pieces += thing.get_unitary([modes[i] for i in self.modes] if modes else self.modes)
+                pieces += thing.get_unitary(remapped)
             return pieces
 
 
