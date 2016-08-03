@@ -1,11 +1,6 @@
 from setuptools import setup, Extension
 import numpy
 
-core = Extension('ulo.core',
-                 ['./core/core.c'],
-                 extra_compile_args=["-Ofast", "-march=native"],
-                 include_dirs=[numpy.get_include()])
-
 setup(
     name="ulo",
     version="0.1.1",

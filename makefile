@@ -5,9 +5,6 @@ DOC_DIR = doc
 test: ext
 	nosetests -s
 
-ext: core/*.c core/*.h
-	python setup.py build_ext --inplace
-
 sdist:
 	python setup.py build sdist
 
