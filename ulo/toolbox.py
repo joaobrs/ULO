@@ -1,5 +1,11 @@
+"""
+This is a toolbox of standard linear-optical components.
+"""
+
 import numpy as np
+from fractions import Fraction
 from ulo.circuit import Circuit, Component
+
 
 class Beamsplitter(Component):
 
@@ -69,5 +75,3 @@ class MZI(Circuit):
 
     """ A Mach-Zehnder interferometer, testing parametric circuits """
     components = Phase(0), BS(0), Phase(0), BS(0), Phase(0)
-
-

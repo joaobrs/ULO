@@ -27,9 +27,12 @@ class Circuit(object):
         self.modes = modes
 
     def decompose(self, modes=None):
-        """ Decomposes the circuit into a simple list of ``Component``s::
+        """ 
+        Decomposes the circuit into a simple list of Components, re-mapped to a given set of modes.
 
-        :param modes: Should not be used
+        :param modes: The modes to remap (optional)
+
+        For example::
 
             >>> print c.decompose()
 
@@ -67,14 +70,18 @@ class Circuit(object):
 class Component(Circuit):
 
     """ A ``Component`` is a ``Circuit`` with a specified unitary representation -- it is not a composite object.
+
+    So, for example, a beamsplitter is a component. But a fusion gate, which is made of beamsplitters, is a circuit.
     """
 
     def decompose(self, modes=None):
+        """ This is overridden because we are no longer recursive """
         remapped = tuple([modes[i]
                          for i in self.modes] if modes else self.modes)
         return ((self.__class__.__name__, self.get_unitary(), remapped),)
 
     def set_parameter(self, key, values):
+        """ Sets a parameter such as reflectivity """
         if hasattr(self, key):
             setattr(self, key, values.next())
 
