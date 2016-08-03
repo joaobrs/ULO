@@ -1,5 +1,5 @@
 import numpy as np
-from ulo import Circuit, BS, Fusion
+from ulo import Circuit, BS, FusionII
 
 def test_circuit():
     """ Simple tests """
@@ -22,7 +22,7 @@ def test_bs():
 
 def test_fusion():
     """ Test that fusion makes sense """
-    c = Fusion()
+    c = FusionII()
     u = c.get_unitary()
     assert np.allclose(np.dot(np.transpose(np.conjugate(u)), u), np.eye(4)), "Fusion is unitary"
 

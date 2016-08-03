@@ -1,2 +1,3 @@
-from ulo.circuit import Circuit, BS, Beamsplitter, FusionI, FusionII, Swap
+from ulo.circuit import Circuit, Component
+from ulo.toolbox import BS, Beamsplitter, FusionI, FusionII, Swap
 

@@ -21,7 +21,7 @@ class State(defaultdict):
                 imag_sign = "+" if amp.imag>=0 else "-"
                 imag_frac = Fraction(str(amp.imag**2)).limit_denominator()
                 bits = label, real_sign, real_frac, imag_sign, imag_frac
-                s += "|{}>: \t{}√{}\t{} i √{}\n".format(*bits)  #TODO: \rangle
+                s += "|{}〉: \t{}√{}\t{} i √{}\n".format(*bits)  #TODO: \rangle
         return s
 
 
